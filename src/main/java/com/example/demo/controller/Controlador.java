@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,14 +21,14 @@ import com.example.demo.entity.Usuarios;
 public class Controlador {
 	@Autowired
 	UsuariosDAO usuariosDAO;
-	
+
 	@GetMapping("/usuarios/{id}")
-	public ResponseEntity<Optional<Usuarios>> findUser(@PathVariable int id) {
+	public ResponseEntity<Optional<Usuarios>> readUser(@PathVariable int id) {
 		return ResponseEntity.ok(usuariosDAO.findById(id));
 	}
 
 	@GetMapping("/usuarios/")
-	public ResponseEntity<List<Usuarios>> listUsers() {
+	public ResponseEntity<List<Usuarios>> readAllUsers() {
 		return ResponseEntity.ok(usuariosDAO.findAll());
 	}
 
@@ -57,5 +58,14 @@ public class Controlador {
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@DeleteMapping("/usuarios/{id}")
+	public ResponseEntity<Usuarios> deleteUser(@PathVariable int id) {
+		if (!usuariosDAO.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		usuariosDAO.deleteById(id);
+		return ResponseEntity.ok().build();
 	}
 }
