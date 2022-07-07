@@ -39,27 +39,27 @@ public class Controlador {
 		return ResponseEntity.ok(viajesDAO.findAll());
 	}
 
-	@PostMapping("/viajes/")
-	public ResponseEntity<Viajes> createViaje(Viajes viaje) {
-		try {
-			if (viajesDAO.existsById(viaje.getId())) {
-				return ResponseEntity.notFound().build();
-			}
+	@PostMapping("/viajes/{idusuario}")
+    public ResponseEntity<Viajes> createViaje(Viajes viaje,@PathVariable int idusuario) {
+        try {
+            if (!usuariosDAO.existsById(idusuario)) {
+                return ResponseEntity.notFound().build();
+            }
+            viaje.setUsuarios_idUsuarios(idusuario);
+            viajesDAO.save(viaje);
+            return ResponseEntity.ok(viaje);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
-			viajesDAO.save(viaje);
-			return ResponseEntity.ok(viaje);
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
-	}
-
-	@PutMapping("/viajes/")
+	@PutMapping("/viajes")
 	public ResponseEntity<Viajes> updateViaje(Viajes viaje) {
 		try {
 			if (!viajesDAO.existsById(viaje.getId())) {
 				return ResponseEntity.notFound().build();
 			}
-
+			
 			viajesDAO.save(viaje);
 			return ResponseEntity.ok(viaje);
 		} catch (Exception e) {

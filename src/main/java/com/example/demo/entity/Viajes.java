@@ -18,11 +18,9 @@ public class Viajes {
 	private int id;
     private String nombre;
     private String descripcion;
-    @Column(name = "fechainicio") 
-    private Date fechaInicio;
-    @Column(name = "fechafin") 
-    private Date fechaFin;
-    @Column(name = "usuarios_idusuario")
+    private Date fechainicio;
+    private Date fechafin;
+    @Column(name = "usuariosIdusuario")
     private int idUsuarios;
 
     public int getId() {
@@ -49,20 +47,20 @@ public class Viajes {
         this.descripcion = descripcion;
     }
 
-    public Date getFechaInicio() {
-        return this.fechaInicio;
+    public Date getFechainicio() {
+        return this.fechainicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
+    public void setFechainicio(Date fechainicio) {
+        this.fechainicio = fechainicio;
     }
 
-    public   Date getFechaFin() {
-        return this.fechaFin;
+    public   Date getFechafin() {
+        return this.fechafin;
     }
 
-    public void setFechaFin(Date fechaFin) {
-        this.fechaFin = fechaFin;
+    public void setFechafin(Date fechafin) {
+        this.fechafin = fechafin;
     }
 
     public int getUsuarios_idUsuarios() {
