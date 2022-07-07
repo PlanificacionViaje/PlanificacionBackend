@@ -10,16 +10,44 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "itemsViaje")
+@Table(name = "itemsviaje")
 public class ItemsViaje {
     @Id
-    @Column(name = "idItemsViaje")
+    @Column(name = "iditemsviaje")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private int id;
     private String nombre;
     private String descripcion;
     private Time hora;
+    private double precio;
+    private double ubicacionlatitud;
+    private double ubicacionlongitud;
+    private int viajes_idviajes;
+
+    public void setUbicacionlatitud(double ubicacionlatitud) {
+        this.ubicacionlatitud = ubicacionlatitud;
+    }
+
+    public void setUbicacionlongitud(double ubicacionlongitud) {
+        this.ubicacionlongitud = ubicacionlongitud;
+    }
+
+    public void setViajes_idviajes(int viajes_idviajes) {
+        this.viajes_idviajes = viajes_idviajes;
+    }
+
+    public double getUbicacionlatitud() {
+        return ubicacionlatitud;
+    }
+
+    public double getUbicacionlongitud() {
+        return ubicacionlongitud;
+    }
+
+    public int getViajes_idviajes() {
+        return viajes_idviajes;
+    }
 
     public int getId() {
         return id;
@@ -41,18 +69,6 @@ public class ItemsViaje {
         return precio;
     }
 
-    public double getUbicacionLatitud() {
-        return ubicacionLatitud;
-    }
-
-    public double getUbicacionLongitud() {
-        return ubicacionLongitud;
-    }
-
-    private double precio;
-    private double ubicacionLatitud;
-    private double ubicacionLongitud;
-
     public void setId(int id) {
         this.id = id;
     }
@@ -71,14 +87,6 @@ public class ItemsViaje {
 
     public void setPrecio(double precio) {
         this.precio = precio;
-    }
-
-    public void setUbicacionLatitud(double ubicacionLatitud) {
-        this.ubicacionLatitud = ubicacionLatitud;
-    }
-
-    public void setUbicacionLongitud(double ubicacionLongitud) {
-        this.ubicacionLongitud = ubicacionLongitud;
     }
 
 }
