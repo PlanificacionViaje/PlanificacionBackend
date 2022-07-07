@@ -25,6 +25,8 @@ public class Controlador {
 		return ResponseEntity.ok(itemsviajeDAO.findById(id));
 	}
 
+	// Tengo que sustituir todos los idusuario por el idviaje, para eso necesito la
+	// clase viajes
 	@PostMapping("/items/")
 	public ResponseEntity<ItemsViaje> createUser(ItemsViaje itemsviaje, @PathVariable int idusuario) {
 		try {
