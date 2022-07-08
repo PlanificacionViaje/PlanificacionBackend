@@ -23,12 +23,13 @@ public class Controlador {
 	@Autowired
 	ViajesDAO viajesDAO;
 
+	// CRUD Tabla usuarios
 	@GetMapping("/usuarios")
 	public ResponseEntity<List<Usuarios>> listUsuarios() {
 		return ResponseEntity.ok(usuariosDAO.findAll());
 	}
 
-	@PostMapping("/usuarios/")
+	@PostMapping("/usuarios")
 	public ResponseEntity<Usuarios> createUser(Usuarios usuario) {
 		try {
 			if (usuariosDAO.existsById(usuario.getId())) {
@@ -42,9 +43,15 @@ public class Controlador {
 		}
 	}
 
+	// CRUD Tabla viajes
 	@GetMapping("/viajes")
-	public ResponseEntity<List<Viajes>> listViajes() {
+	public ResponseEntity<List<Viajes>> readAllViajes() {
 		return ResponseEntity.ok(viajesDAO.findAll());
+	}
+
+	@GetMapping("/viajes/{id}")
+	public ResponseEntity<Optional<Viajes>> readViajes(@PathVariable int id) {
+		return ResponseEntity.ok(viajesDAO.findById(id));
 	}
 
 	@PostMapping("/viajes/{idusuario}")
@@ -80,30 +87,24 @@ public class Controlador {
 		return ResponseEntity.ok().build();
 	}
 
-	// ITEMSVIAJES
-
-	@GetMapping("/items/{id}")
-	public ResponseEntity<Optional<ItemsViaje>> readItem(@PathVariable int id) {
-		return ResponseEntity.ok(itemsviajeDAO.findById(id));
-	}
+	// CRUD Tabla itemsviaje
 
 	@GetMapping("/items")
 	public ResponseEntity<List<ItemsViaje>> readAllItems() {
 		return ResponseEntity.ok(itemsviajeDAO.findAll());
 	}
 
-	// Tengo que sustituir todos los idusuario por el idviaje, para eso necesito la
-	// clase viajes
+	@GetMapping("/items/{id}")
+	public ResponseEntity<Optional<ItemsViaje>> readItem(@PathVariable int id) {
+		return ResponseEntity.ok(itemsviajeDAO.findById(id));
+	}
+
 	@PostMapping("/items/{idviajes}")
 	public ResponseEntity<ItemsViaje> createUser(ItemsViaje itemsviaje, @PathVariable int idviajes) {
 		try {
 			if (!viajesDAO.existsById(idviajes)) {
 				return ResponseEntity.notFound().build();
 			}
-			// viajes.setUsuarios_idUsuarios(idusuario);
-			// if (!viajesDAO.existsById(idviajes)) {
-			// return ResponseEntity.notFound().build();
-			// }
 			itemsviaje.setViajes_idviajes(idviajes);
 			itemsviajeDAO.save(itemsviaje);
 			return ResponseEntity.ok(itemsviaje);
@@ -119,5 +120,16 @@ public class Controlador {
 		}
 		itemsviajeDAO.deleteById(id);
 		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/items")
+	public ResponseEntity<ItemsViaje> updateItem(ItemsViaje itemsviaje) {
+		if (!itemsviajeDAO.existsById(itemsviaje.getId())) {
+			// return ResponseEntity.notFound().build();
+			return ResponseEntity.ok(itemsviaje);
+		}
+
+		itemsviajeDAO.save(itemsviaje);
+		return ResponseEntity.ok(itemsviaje);
 	}
 }
