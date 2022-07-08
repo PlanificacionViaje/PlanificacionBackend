@@ -53,7 +53,7 @@ public class Controlador {
 			if (!usuariosDAO.existsById(idusuario)) {
 				return ResponseEntity.notFound().build();
 			}
-			viaje.setUsuarios_idUsuarios(idusuario);
+			viaje.setIdusuarios(idusuario);
 			viajesDAO.save(viaje);
 			return ResponseEntity.ok(viaje);
 		} catch (Exception e) {
@@ -61,17 +61,15 @@ public class Controlador {
 		}
 	}
 
-	// @PutMapping("/viajes")
-	// public ResponseEntity<Viajes> updateViaje(Viajes viaje) {
-	// try {
-	// if (!viajesDAO.existsById(viaje.getId())) {
-	// return ResponseEntity.notFound().build();
-	// }
+	@PutMapping("/viajes")
+	public ResponseEntity<Viajes> updateViaje(Viajes viaje) {
+		if (!viajesDAO.existsById(viaje.getId())) {
+			return ResponseEntity.notFound().build();
+		}
 
-	// viajesDAO.save(viaje);
-	// return ResponseEntity.ok(viaje);
-
-	// }
+		viajesDAO.save(viaje);
+		return ResponseEntity.ok(viaje);
+	}
 
 	@DeleteMapping("/viajes/{id}")
 	public ResponseEntity<Viajes> deleteViaje(@PathVariable int id) {
@@ -87,6 +85,11 @@ public class Controlador {
 	@GetMapping("/items/{id}")
 	public ResponseEntity<Optional<ItemsViaje>> readItem(@PathVariable int id) {
 		return ResponseEntity.ok(itemsviajeDAO.findById(id));
+	}
+
+	@GetMapping("/items")
+	public ResponseEntity<List<ItemsViaje>> readAllItems() {
+		return ResponseEntity.ok(itemsviajeDAO.findAll());
 	}
 
 	// Tengo que sustituir todos los idusuario por el idviaje, para eso necesito la
@@ -107,5 +110,14 @@ public class Controlador {
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@DeleteMapping("/items/{id}")
+	public ResponseEntity<ItemsViaje> deleteItem(@PathVariable int id) {
+		if (!itemsviajeDAO.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		itemsviajeDAO.deleteById(id);
+		return ResponseEntity.ok().build();
 	}
 }

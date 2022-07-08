@@ -21,7 +21,7 @@ public class Viajes {
     private Date fechainicio;
     private Date fechafin;
     @Column(name = "usuariosIdusuario")
-    private int idUsuarios;
+    private int idusuarios;
 
     public int getId() {
         return this.id;
@@ -63,11 +63,11 @@ public class Viajes {
         this.fechafin = fechafin;
     }
 
-    public int getUsuarios_idUsuarios() {
-        return this.idUsuarios;
+    public int getIdusuarios() {
+        return this.idusuarios;
     }
 
-    public void setUsuarios_idUsuarios(int Usuarios_idUsuarios) {
-        this.idUsuarios = Usuarios_idUsuarios;
+    public void setIdusuarios(int idusuarios) {
+        this.idusuarios = idusuarios;
     }
 }
