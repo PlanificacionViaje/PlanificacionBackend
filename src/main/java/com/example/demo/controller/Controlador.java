@@ -5,9 +5,16 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import com.example.demo.dao.ItemsViajeDAO;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.demo.dao.UsuariosDAO;
+import com.example.demo.dao.ItemsViajeDAO;
 import com.example.demo.dao.ViajesDAO;
 import com.example.demo.entity.ItemsViaje;
 import com.example.demo.entity.Usuarios;
@@ -23,9 +30,13 @@ public class Controlador {
 	@Autowired
 	ViajesDAO viajesDAO;
 
-	// CRUD Tabla usuarios
+	@GetMapping("/usuarios/{id}")
+	public ResponseEntity<Optional<Usuarios>> readUser(@PathVariable int id) {
+		return ResponseEntity.ok(usuariosDAO.findById(id));
+	}
+
 	@GetMapping("/usuarios")
-	public ResponseEntity<List<Usuarios>> listUsuarios() {
+	public ResponseEntity<List<Usuarios>> readAllUsers() {
 		return ResponseEntity.ok(usuariosDAO.findAll());
 	}
 
@@ -41,6 +52,29 @@ public class Controlador {
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@PutMapping("/usuarios")
+	public ResponseEntity<Usuarios> updateUser(Usuarios usuario) {
+		try {
+			if (!usuariosDAO.existsById(usuario.getId())) {
+				return ResponseEntity.notFound().build();
+			}
+
+			usuariosDAO.save(usuario);
+			return ResponseEntity.ok(usuario);
+		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@DeleteMapping("/usuarios/{id}")
+	public ResponseEntity<Usuarios> deleteUser(@PathVariable int id) {
+		if (!usuariosDAO.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		usuariosDAO.deleteById(id);
+		return ResponseEntity.ok().build();
 	}
 
 	// CRUD Tabla viajes
