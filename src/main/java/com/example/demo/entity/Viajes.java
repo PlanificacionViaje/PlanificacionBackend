@@ -20,7 +20,7 @@ public class Viajes {
     private String descripcion;
     private Date fechainicio;
     private Date fechafin;
-    @Column(name = "usuariosIdusuario")
+    @Column(name = "usuarios_idusuario")
     private int idusuarios;
 
     public int getId() {

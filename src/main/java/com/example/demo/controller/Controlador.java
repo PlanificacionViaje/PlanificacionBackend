@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +46,7 @@ public class Controlador {
 	@PostMapping("/usuarios")
 	public ResponseEntity<Usuarios> createUser(Usuarios usuario) {
 		try {
-			if (usuariosDAO.existsById(usuario.getId())) {
+			if (usuariosDAO.existsByCorreo(usuario.getCorreo())) {
 				return ResponseEntity.notFound().build();
 			}
 
@@ -89,14 +92,16 @@ public class Controlador {
 	}
 
 	@PostMapping("/viajes/{idusuario}")
-	public ResponseEntity<Viajes> createViaje(Viajes viaje, @PathVariable int idusuario) {
+	public ResponseEntity<Object> createViaje(Viajes viaje, @PathVariable int idusuario) {
 		try {
 			if (!usuariosDAO.existsById(idusuario)) {
 				return ResponseEntity.notFound().build();
+			} else if (viaje.getFechainicio().compareTo(viaje.getFechafin()) > 0) {
+				return generateResponse("Fechas caca", HttpStatus.NOT_ACCEPTABLE);
 			}
 			viaje.setIdusuarios(idusuario);
 			viajesDAO.save(viaje);
-			return ResponseEntity.ok(viaje);
+			return generateResponse("El viaje se guardó correctamente", HttpStatus.OK, viaje);
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
@@ -139,7 +144,7 @@ public class Controlador {
 			if (!viajesDAO.existsById(idviajes)) {
 				return ResponseEntity.notFound().build();
 			}
-			itemsviaje.setViajes_idviajes(idviajes);
+			itemsviaje.setIdviajes(idviajes);
 			itemsviajeDAO.save(itemsviaje);
 			return ResponseEntity.ok(itemsviaje);
 		} catch (Exception e) {
@@ -165,5 +170,22 @@ public class Controlador {
 
 		itemsviajeDAO.save(itemsviaje);
 		return ResponseEntity.ok(itemsviaje);
+	}
+
+	public static ResponseEntity<Object> generateResponse(String message, HttpStatus status) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("message", message);
+		map.put("status", status.value());
+
+		return new ResponseEntity<Object>(map, status);
+	}
+
+	public static ResponseEntity<Object> generateResponse(String message, HttpStatus status, Object responseObj) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("message", message);
+		map.put("status", status.value());
+		map.put("data", responseObj);
+
+		return new ResponseEntity<Object>(map, status);
 	}
 }

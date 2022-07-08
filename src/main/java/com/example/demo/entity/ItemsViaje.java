@@ -15,7 +15,6 @@ public class ItemsViaje {
     @Id
     @Column(name = "iditemsviaje")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int id;
     private String nombre;
     private String descripcion;
@@ -23,7 +22,8 @@ public class ItemsViaje {
     private double precio;
     private double ubicacionlatitud;
     private double ubicacionlongitud;
-    private int viajes_idviaje;
+    @Column(name = "viajes_idviaje")
+    private int idviaje;
 
     public void setUbicacionlatitud(double ubicacionlatitud) {
         this.ubicacionlatitud = ubicacionlatitud;
@@ -33,8 +33,8 @@ public class ItemsViaje {
         this.ubicacionlongitud = ubicacionlongitud;
     }
 
-    public void setViajes_idviajes(int viajes_idviajes) {
-        this.viajes_idviaje = viajes_idviajes;
+    public void setIdviajes(int idviaje) {
+        this.idviaje = idviaje;
     }
 
     public double getUbicacionlatitud() {
@@ -45,8 +45,8 @@ public class ItemsViaje {
         return ubicacionlongitud;
     }
 
-    public int getViajes_idviajes() {
-        return viajes_idviaje;
+    public int getIdviajes() {
+        return idviaje;
     }
 
     public int getId() {
