@@ -5,33 +5,41 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+import com.example.demo.dao.ItemsViajeDAO;
 import com.example.demo.dao.UsuariosDAO;
 import com.example.demo.dao.ViajesDAO;
+import com.example.demo.entity.ItemsViaje;
 import com.example.demo.entity.Usuarios;
 import com.example.demo.entity.Viajes;
-
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-
 
 @RestController
 @RequestMapping("/")
 public class Controlador {
 	@Autowired
+	ItemsViajeDAO itemsviajeDAO;
+	@Autowired
 	UsuariosDAO usuariosDAO;
 	@Autowired
 	ViajesDAO viajesDAO;
-	
+
 	@GetMapping("/usuarios")
 	public ResponseEntity<List<Usuarios>> listUsuarios() {
 		return ResponseEntity.ok(usuariosDAO.findAll());
+	}
+
+	@PostMapping("/usuarios/")
+	public ResponseEntity<Usuarios> createUser(Usuarios usuario) {
+		try {
+			if (usuariosDAO.existsById(usuario.getId())) {
+				return ResponseEntity.notFound().build();
+			}
+
+			usuariosDAO.save(usuario);
+			return ResponseEntity.ok(usuario);
+		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@GetMapping("/viajes")
@@ -40,32 +48,30 @@ public class Controlador {
 	}
 
 	@PostMapping("/viajes/{idusuario}")
-    public ResponseEntity<Viajes> createViaje(Viajes viaje,@PathVariable int idusuario) {
-        try {
-            if (!usuariosDAO.existsById(idusuario)) {
-                return ResponseEntity.notFound().build();
-            }
-            viaje.setUsuarios_idUsuarios(idusuario);
-            viajesDAO.save(viaje);
-            return ResponseEntity.ok(viaje);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-	@PutMapping("/viajes")
-	public ResponseEntity<Viajes> updateViaje(Viajes viaje) {
+	public ResponseEntity<Viajes> createViaje(Viajes viaje, @PathVariable int idusuario) {
 		try {
-			if (!viajesDAO.existsById(viaje.getId())) {
+			if (!usuariosDAO.existsById(idusuario)) {
 				return ResponseEntity.notFound().build();
 			}
-			
+			viaje.setUsuarios_idUsuarios(idusuario);
 			viajesDAO.save(viaje);
 			return ResponseEntity.ok(viaje);
 		} catch (Exception e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
+
+	// @PutMapping("/viajes")
+	// public ResponseEntity<Viajes> updateViaje(Viajes viaje) {
+	// try {
+	// if (!viajesDAO.existsById(viaje.getId())) {
+	// return ResponseEntity.notFound().build();
+	// }
+
+	// viajesDAO.save(viaje);
+	// return ResponseEntity.ok(viaje);
+
+	// }
 
 	@DeleteMapping("/viajes/{id}")
 	public ResponseEntity<Viajes> deleteViaje(@PathVariable int id) {
@@ -74,5 +80,32 @@ public class Controlador {
 		}
 		viajesDAO.deleteById(id);
 		return ResponseEntity.ok().build();
+	}
+
+	// ITEMSVIAJES
+
+	@GetMapping("/items/{id}")
+	public ResponseEntity<Optional<ItemsViaje>> readItem(@PathVariable int id) {
+		return ResponseEntity.ok(itemsviajeDAO.findById(id));
+	}
+
+	// Tengo que sustituir todos los idusuario por el idviaje, para eso necesito la
+	// clase viajes
+	@PostMapping("/items/{idviajes}")
+	public ResponseEntity<ItemsViaje> createUser(ItemsViaje itemsviaje, @PathVariable int idviajes) {
+		try {
+			if (!viajesDAO.existsById(idviajes)) {
+				return ResponseEntity.notFound().build();
+			}
+			// viajes.setUsuarios_idUsuarios(idusuario);
+			// if (!viajesDAO.existsById(idviajes)) {
+			// return ResponseEntity.notFound().build();
+			// }
+			itemsviaje.setViajes_idviajes(idviajes);
+			itemsviajeDAO.save(itemsviaje);
+			return ResponseEntity.ok(itemsviaje);
+		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

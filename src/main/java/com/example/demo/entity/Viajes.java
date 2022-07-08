@@ -1,4 +1,5 @@
 package com.example.demo.entity;
+
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -8,14 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name= "viajes")
+@Table(name = "viajes")
 public class Viajes {
     @Id
-    @Column(name = "idviaje")    
+    @Column(name = "idviaje")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+    private int id;
     private String nombre;
     private String descripcion;
     private Date fechainicio;
@@ -55,7 +55,7 @@ public class Viajes {
         this.fechainicio = fechainicio;
     }
 
-    public   Date getFechafin() {
+    public Date getFechafin() {
         return this.fechafin;
     }
 
@@ -69,5 +69,5 @@ public class Viajes {
 
     public void setUsuarios_idUsuarios(int Usuarios_idUsuarios) {
         this.idUsuarios = Usuarios_idUsuarios;
-    }    
+    }
 }
