@@ -27,12 +27,12 @@ public class Controlador {
 		return ResponseEntity.ok(usuariosDAO.findById(id));
 	}
 
-	@GetMapping("/usuarios/")
+	@GetMapping("/usuarios")
 	public ResponseEntity<List<Usuarios>> readAllUsers() {
 		return ResponseEntity.ok(usuariosDAO.findAll());
 	}
 
-	@PostMapping("/usuarios/")
+	@PostMapping("/usuarios")
 	public ResponseEntity<Usuarios> createUser(Usuarios usuario) {
 		try {
 			if (usuariosDAO.existsById(usuario.getId())) {
@@ -46,7 +46,7 @@ public class Controlador {
 		}
 	}
 
-	@PutMapping("/usuarios/")
+	@PutMapping("/usuarios")
 	public ResponseEntity<Usuarios> updateUser(Usuarios usuario) {
 		try {
 			if (!usuariosDAO.existsById(usuario.getId())) {
