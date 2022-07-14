@@ -93,6 +93,11 @@ public class Controlador {
 		return ResponseEntity.ok(viajesDAO.findById(id));
 	}
 
+	@GetMapping("/usuarios/{idusuarios}/viajes")
+	public ResponseEntity<List<Viajes>> readAllViajesFromUsuario(@PathVariable int idusuarios) {
+		return ResponseEntity.ok(viajesDAO.findAllByIdusuarios(idusuarios));
+	}
+
 	@PostMapping("/viajes/{idusuario}")
 	public ResponseEntity<Object> createViaje(Viajes viaje, @PathVariable int idusuario) {
 		try {
@@ -138,6 +143,11 @@ public class Controlador {
 	@GetMapping("/items/{id}")
 	public ResponseEntity<Optional<ItemsViaje>> readItem(@PathVariable int id) {
 		return ResponseEntity.ok(itemsviajeDAO.findById(id));
+	}
+
+	@GetMapping("/viajes/{idviaje}/items")
+	public ResponseEntity<List<ItemsViaje>> readAllItemsFromViaje(@PathVariable int idviaje) {
+		return ResponseEntity.ok(itemsviajeDAO.findAllByIdviaje(idviaje));
 	}
 
 	@PostMapping("/items/{idviajes}")
