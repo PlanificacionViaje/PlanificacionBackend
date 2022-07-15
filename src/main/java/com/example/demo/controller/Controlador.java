@@ -98,15 +98,15 @@ public class Controlador {
 		return ResponseEntity.ok(viajesDAO.findAllByIdusuarios(idusuarios));
 	}
 
-	@PostMapping("/viajes/{idusuario}")
-	public ResponseEntity<Object> createViaje(Viajes viaje, @PathVariable int idusuario) {
+	@PostMapping("/viajes")
+	public ResponseEntity<Object> createViaje(Viajes viaje) {
 		try {
-			if (!usuariosDAO.existsById(idusuario)) {
+			if (!usuariosDAO.existsById(viaje.getIdusuarios())) {
 				return ResponseEntity.notFound().build();
 			} else if (viaje.getFechainicio().compareTo(viaje.getFechafin()) > 0) {
 				return generateResponse("Fechas caca", HttpStatus.NOT_ACCEPTABLE);
 			}
-			viaje.setIdusuarios(idusuario);
+
 			viajesDAO.save(viaje);
 			return generateResponse("El viaje se guardó correctamente", HttpStatus.OK, viaje);
 		} catch (Exception e) {
@@ -150,13 +150,13 @@ public class Controlador {
 		return ResponseEntity.ok(itemsviajeDAO.findAllByIdviaje(idviaje));
 	}
 
-	@PostMapping("/items/{idviajes}")
-	public ResponseEntity<ItemsViaje> createUser(ItemsViaje itemsviaje, @PathVariable int idviajes) {
+	@PostMapping("/items")
+	public ResponseEntity<ItemsViaje> createUser(ItemsViaje itemsviaje) {
 		try {
-			if (!viajesDAO.existsById(idviajes)) {
+			if (!viajesDAO.existsById(itemsviaje.getIdviajes())) {
 				return ResponseEntity.notFound().build();
 			}
-			itemsviaje.setIdviajes(idviajes);
+
 			itemsviajeDAO.save(itemsviaje);
 			return ResponseEntity.ok(itemsviaje);
 		} catch (Exception e) {
