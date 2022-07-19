@@ -48,7 +48,6 @@ public class Controlador {
 
 	@GetMapping("/usuarios/login")
 	public ResponseEntity<Object> loginUser(@RequestParam String correo, @RequestParam String contrasena) {
-		System.out.println(correo + " " + contrasena);
 		return ResponseEntity.ok(usuariosDAO.findByCorreoIgnoreCaseAndContrasena(correo, contrasena));
 	}
 
