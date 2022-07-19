@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dao.UsuariosDAO;
@@ -43,6 +44,12 @@ public class Controlador {
 	@GetMapping("/usuarios")
 	public ResponseEntity<List<Usuarios>> readAllUsers() {
 		return ResponseEntity.ok(usuariosDAO.findAll());
+	}
+
+	@GetMapping("/usuarios/login")
+	public ResponseEntity<Object> loginUser(@RequestParam String correo, @RequestParam String contrasena) {
+		System.out.println(correo + " " + contrasena);
+		return ResponseEntity.ok(usuariosDAO.findByCorreoIgnoreCaseAndContrasena(correo, contrasena));
 	}
 
 	@PostMapping("/usuarios")

@@ -7,7 +7,7 @@ DROP DATABASE IF EXISTS `freeway`;
 -- -----------------------------------------------------
 -- Schema freeway
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `freeway` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `freeway` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 USE `freeway` ;
 
 -- -----------------------------------------------------
