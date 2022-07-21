@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.sql.Date;
 import java.sql.Time;
 
 import javax.persistence.Column;
@@ -19,6 +20,7 @@ public class ItemsViaje {
     private String nombre;
     private String descripcion;
     private Time hora;
+    private Date fecha;
     private double precio;
     private double ubicacionlatitud;
     private double ubicacionlongitud;
@@ -65,6 +67,10 @@ public class ItemsViaje {
         return hora;
     }
 
+    public Date getFecha() {
+        return fecha;
+    }
+
     public double getPrecio() {
         return precio;
     }
@@ -83,6 +89,10 @@ public class ItemsViaje {
 
     public void setHora(Time hora) {
         this.hora = hora;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     public void setPrecio(double precio) {
