@@ -147,7 +147,7 @@ public class Controlador {
 	public ResponseEntity<Object> readAllViajesFromUsuario(@PathVariable int idusuarios) {
 		try {
 			if (usuariosDAO.existsById(idusuarios)) {
-				return generateResponse("Lista de viajes del usuario.", HttpStatus.OK, viajesDAO.findAllByIdusuarios(idusuarios));
+				return generateResponse("Lista de viajes del usuario.", HttpStatus.OK, viajesDAO.findAllByIdusuariosOrderByFechainicio(idusuarios));
 			} else {
 				return generateResponse("El usuario no existe.", HttpStatus.NOT_FOUND);
 			}
@@ -179,7 +179,11 @@ public class Controlador {
 		try {
 			if (!viajesDAO.existsById(viaje.getId())) {
 				return generateResponse("El viaje no existe.", HttpStatus.NOT_FOUND);
-			} 
+			} else if (viaje.getIdusuarios() != viajesDAO.findById(viaje.getId()).get().getIdusuarios()) {
+				return generateResponse("No se puede cambiar el dueño del viaje.", HttpStatus.BAD_REQUEST);
+			} else if (viaje.getFechainicio().compareTo(viaje.getFechafin()) > 0) {
+				return generateResponse("La fecha de fin del viaje no puede ser menor a la de inicio.", HttpStatus.BAD_REQUEST);
+			}
 
 			viajesDAO.save(viaje);
 			return generateResponse("Datos del viaje modificados correctamente.", HttpStatus.OK, viaje);
@@ -241,9 +245,9 @@ public class Controlador {
 	}
 
 	@PostMapping("/items")
-	public ResponseEntity<Object> createUser(ItemsViaje itemsviaje) {
+	public ResponseEntity<Object> createItem(ItemsViaje itemsviaje) {
 		try {
-			Optional<Viajes> viaje = viajesDAO.findById(itemsviaje.getId());
+			Optional<Viajes> viaje = viajesDAO.findById(itemsviaje.getIdviajes());
 
 			if (!viaje.isPresent()) {
 				return generateResponse("No se puede crear el item porque el viaje proporcionado no existe.", HttpStatus.BAD_REQUEST);
@@ -284,7 +288,7 @@ public class Controlador {
 			} else if (itemsviaje.getFecha().compareTo(viaje.get().getFechafin()) > 0 || itemsviaje.getFecha().compareTo(viaje.get().getFechainicio()) < 0) {
 				return generateResponse("La fecha proporcionada no se encuentra entre las fechas del viaje.", HttpStatus.BAD_REQUEST);
 			} else if (itemsviaje.getIdviajes() != itemsviajeDAO.findById(itemsviaje.getId()).get().getIdviajes()) {
-				return generateResponse("No se puede cambiar un item de viaje.", HttpStatus.BAD_REQUEST);
+				return generateResponse("El item no puede ser cambiado de viaje.", HttpStatus.BAD_REQUEST);
 			}
 
 			itemsviajeDAO.save(itemsviaje);
@@ -299,7 +303,7 @@ public class Controlador {
 		map.put("message", message);
 		map.put("status", status.value());
 
-		return new ResponseEntity<Object>(map, status);
+		return new ResponseEntity<Object>(map, HttpStatus.OK);
 	}
 
 	public static ResponseEntity<Object> generateResponse(String message, HttpStatus status, Object responseObj) {
@@ -308,6 +312,6 @@ public class Controlador {
 		map.put("status", status.value());
 		map.put("data", responseObj);
 
-		return new ResponseEntity<Object>(map, status);
+		return new ResponseEntity<Object>(map, HttpStatus.OK);
 	}
 }

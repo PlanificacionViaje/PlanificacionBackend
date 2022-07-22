@@ -8,4 +8,5 @@ import com.example.demo.entity.Viajes;
 
 public interface ViajesDAO extends JpaRepository<Viajes, Integer> {
     public List<Viajes> findAllByIdusuarios(int idusuarios);
+    public List<Viajes> findAllByIdusuariosOrderByFechainicio(int idusuarios);
 }

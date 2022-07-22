@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `freeway`.`ItemsViaje` (
   `nombre` VARCHAR(45) NOT NULL,
   `descripcion` VARCHAR(100) NULL,
   `hora` TIME NULL,
+  `fecha` DATE NULL,
   `precio` DOUBLE NULL,
   `ubicacionLatitud` DOUBLE NOT NULL,
   `ubicacionLongitud` DOUBLE NOT NULL,
