@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,10 +79,16 @@ public class Controlador {
 	@PostMapping("/usuarios")
 	public ResponseEntity<Object> createUser(Usuarios usuario) {
 		try {
+			String regex = "^(.+)@(.+)$";
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(usuario.getCorreo());
+
 			if (usuariosDAO.existsByCorreo(usuario.getCorreo())) {
 				return generateResponse("El correo proporcionado ya está en uso.", HttpStatus.BAD_REQUEST);
 			} else if (usuariosDAO.existsById(usuario.getId())) {
 				return generateResponse("Ya existe un usuario con ese identificador.", HttpStatus.BAD_REQUEST);
+			} else if (!matcher.matches()) {
+				return generateResponse("El correo introducido no es valido.", HttpStatus.BAD_REQUEST);
 			}
 
 			usuariosDAO.save(usuario);
@@ -165,6 +173,8 @@ public class Controlador {
 				return generateResponse("Ya existe un viaje con ese identificador.", HttpStatus.BAD_REQUEST);
 			} else if (viaje.getFechainicio().compareTo(viaje.getFechafin()) > 0) {
 				return generateResponse("La fecha de fin del viaje no puede ser menor a la de inicio.", HttpStatus.BAD_REQUEST);
+			} else if (viaje.getNombre().trim().isEmpty()) {
+				return generateResponse("El nombre del viaje debe contener texto.", HttpStatus.BAD_REQUEST);
 			}
 
 			viajesDAO.save(viaje);
