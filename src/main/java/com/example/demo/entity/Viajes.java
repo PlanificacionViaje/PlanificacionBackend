@@ -36,7 +36,7 @@ public class Viajes {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = nombre.trim();
     }
 
     public String getDescripcion() {
@@ -44,7 +44,7 @@ public class Viajes {
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+        this.descripcion = descripcion.trim();
     }
 
     public Date getFechainicio() {

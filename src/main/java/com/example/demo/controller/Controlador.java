@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -88,7 +91,13 @@ public class Controlador {
 			} else if (usuariosDAO.existsById(usuario.getId())) {
 				return generateResponse("Ya existe un usuario con ese identificador.", HttpStatus.BAD_REQUEST);
 			} else if (!matcher.matches()) {
-				return generateResponse("El correo introducido no es valido.", HttpStatus.BAD_REQUEST);
+				return generateResponse("El correo introducido no es válido.", HttpStatus.BAD_REQUEST);
+			} else if (usuario.getContrasena().isEmpty()) {
+				return generateResponse("La contraseña introducida no es válida.", HttpStatus.BAD_REQUEST);
+			} else if (usuario.getNombre().isEmpty()) {
+				return generateResponse("El nombre introducido no es válido.", HttpStatus.BAD_REQUEST);
+			} else if (usuario.getNombre().length() > 45) {
+				return generateResponse("El nombre es demasiado largo.", HttpStatus.BAD_REQUEST);
 			}
 
 			usuariosDAO.save(usuario);
@@ -164,6 +173,20 @@ public class Controlador {
 		}
 	}
 
+	@GetMapping("/usuarios/{idusuarios}/proximosviajes")
+	public ResponseEntity<Object> readUpcomingTripsFromUsuario(@PathVariable int idusuarios) {
+		try {
+			if (usuariosDAO.existsById(idusuarios)) {
+					java.sql.Date date = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+				return generateResponse("Próximos viajes del usuario.", HttpStatus.OK, viajesDAO.findAllByIdusuariosAndFechainicioAfterOrderByFechainicio(idusuarios, date));
+			} else {
+				return generateResponse("El usuario no existe.", HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().build();
+		}
+	}
+
 	@PostMapping("/viajes")
 	public ResponseEntity<Object> createViaje(Viajes viaje) {
 		try {
@@ -171,10 +194,16 @@ public class Controlador {
 				return generateResponse("No se puede crear el viaje porque el usuario proporcionado no existe.", HttpStatus.BAD_REQUEST);
 			} else if (viajesDAO.existsById(viaje.getId())) {
 				return generateResponse("Ya existe un viaje con ese identificador.", HttpStatus.BAD_REQUEST);
+			} else if (viaje.getFechainicio().compareTo( new java.sql.Date(Calendar.getInstance().getTime().getTime())) < 0) {
+				return generateResponse("No puedes crear un viaje al pasado.", HttpStatus.BAD_REQUEST);
 			} else if (viaje.getFechainicio().compareTo(viaje.getFechafin()) > 0) {
 				return generateResponse("La fecha de fin del viaje no puede ser menor a la de inicio.", HttpStatus.BAD_REQUEST);
-			} else if (viaje.getNombre().trim().isEmpty()) {
+			} else if (viaje.getNombre().isEmpty()) {
 				return generateResponse("El nombre del viaje debe contener texto.", HttpStatus.BAD_REQUEST);
+			} else if (viaje.getDescripcion().length() > 500) {
+				return generateResponse("La descripción es demasiado larga.", HttpStatus.BAD_REQUEST);
+			} else if (viaje.getNombre().length() > 45) {
+				return generateResponse("El nombre es demasiado largo.", HttpStatus.BAD_REQUEST);
 			}
 
 			viajesDAO.save(viaje);
@@ -265,6 +294,10 @@ public class Controlador {
 				return generateResponse("Ya existe un item con ese identificador.", HttpStatus.BAD_REQUEST);
 			} else if (itemsviaje.getFecha().compareTo(viaje.get().getFechafin()) > 0 || itemsviaje.getFecha().compareTo(viaje.get().getFechainicio()) < 0) {
 				return generateResponse("La fecha proporcionada no se encuentra entre las fechas del viaje.", HttpStatus.BAD_REQUEST);
+			} else if (itemsviaje.getDescripcion().length() > 100) {
+				return generateResponse("La descripción es demasiado larga.", HttpStatus.BAD_REQUEST);
+			} else if (itemsviaje.getNombre().length() > 45) {
+				return generateResponse("El nombre es demasiado larga.", HttpStatus.BAD_REQUEST);
 			}
 
 			itemsviajeDAO.save(itemsviaje);

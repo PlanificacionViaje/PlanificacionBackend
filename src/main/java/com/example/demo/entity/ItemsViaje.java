@@ -80,11 +80,11 @@ public class ItemsViaje {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = nombre.trim();
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+        this.descripcion = descripcion.trim();
     }
 
     public void setHora(Time hora) {

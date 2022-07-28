@@ -32,7 +32,7 @@ public class Usuarios {
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.nombre = nombre.trim();
 	}
 
 	public String getApellidos() {
@@ -40,7 +40,7 @@ public class Usuarios {
 	}
 
 	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
+		this.apellidos = apellidos.trim();
 	}
 
 	public String getCorreo() {
@@ -56,6 +56,6 @@ public class Usuarios {
 	}
 
 	public void setContrasena(String contrasena) {
-		this.contrasena = contrasena;
+		this.contrasena = contrasena.trim();
 	}
 }
